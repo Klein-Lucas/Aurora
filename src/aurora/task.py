@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import date
 import uuid
 from enum import Enum
+from .exceptions import MissingRequiredFieldError
 
 class Status(Enum):
     NEW = "new"
@@ -29,3 +30,7 @@ class Task:
     id: uuid.UUID = field(default_factory=uuid.uuid4)
     created_at: date = field(default_factory=date.today)
     status: Status = field(default=Status.NEW)
+
+    def __post_init__(self):
+        if not self.title:
+            raise MissingRequiredFieldError(["title"])
