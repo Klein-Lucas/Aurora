@@ -31,11 +31,12 @@ class TaskCRUD():
     # Update
     def update_task(self, updated_task: Task):
         data = self.storage.load()
-        existent_task = self._find_in_list(data, updated_task.id)
-        data.remove(existent_task)
-        data.append(updated_task)
-        self.storage.save(data)
-
+        for i, task in enumerate(data):
+            if task.id == updated_task.id:
+                data[i] = updated_task
+                self.storage.save(data)
+                return
+        raise TaskNotFoundError(updated_task.id)
     # Delete
     def delete_by_id(self, id: UUID):
         data = self.storage.load()
