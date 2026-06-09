@@ -28,18 +28,18 @@ uv sync
 
 ## Usage
 
-All commands run with `uv run aurora <command>`.
+All commands run with `python -m aurora.cli <command>`.
 
 ### Create a task
 
 ```bash
-uv run aurora create "Study Python" --description "Review chapter 5" --category study --end-date 2026-06-15
+python -m aurora.cli create "Study Python" --description "Review chapter 5" --category study --end-date 2026-06-15
 ```
 
 ### List tasks
 
 ```bash
-uv run aurora show
+python -m aurora.cli show
 ```
 
 ```
@@ -54,13 +54,13 @@ uv run aurora show
 ### Update a task
 
 ```bash
-uv run aurora update 1 --status in_progress
+python -m aurora.cli update 1 --status in_progress
 ```
 
 ### Delete a task
 
 ```bash
-uv run aurora delete 1
+python -m aurora.cli delete 1
 ```
 
 ## Task Fields
@@ -90,7 +90,7 @@ tests/
 ## Running Tests
 
 ```bash
-uv run pytest
+uv run pytest tests/
 ```
 
 ## License
