@@ -1,22 +1,22 @@
 # aurora
 
-> CLI de gerenciamento de tarefas pessoais — minimalista, rápido e feito para o terminal.
+> A minimalist CLI task manager — fast, clean, and built for the terminal.
 
-## Sobre
+## About
 
-**aurora** é uma ferramenta de linha de comando para criar, visualizar, atualizar e deletar tarefas diretamente do terminal. Construída com [Typer](https://typer.tiangolo.com/) e [Rich](https://rich.readthedocs.io/), combina uma interface simples com uma saída visualmente agradável.
+**aurora** is a command-line tool to create, view, update, and delete tasks directly from the terminal. Built with [Typer](https://typer.tiangolo.com/) and [Rich](https://rich.readthedocs.io/), it combines a simple interface with a visually polished output.
 
-## Tecnologias
+## Tech Stack
 
 - **Python** 3.11+
-- **Typer** — interface de linha de comando
-- **Rich** — tabelas e output colorido no terminal
-- **uv** — gerenciador de pacotes e ambiente virtual
-- **pytest** — testes automatizados
+- **Typer** — CLI framework
+- **Rich** — colored tables and terminal output
+- **uv** — package and environment manager
+- **pytest** — automated tests
 
-## Instalação
+## Installation
 
-Pré-requisito: ter o [uv](https://docs.astral.sh/uv/) instalado.
+Requires [uv](https://docs.astral.sh/uv/).
 
 ```bash
 git clone https://github.com/Klein-Lucas/aurora_root.git
@@ -26,73 +26,73 @@ uv venv
 uv sync
 ```
 
-## Uso
+## Usage
 
-Todos os comandos são executados com `uv run aurora <comando>`.
+All commands run with `uv run aurora <command>`.
 
-### Criar uma tarefa
+### Create a task
 
 ```bash
-uv run aurora create "Estudar Python" --description "Revisar capítulo 5" --category study --end-date 2026-06-15
+uv run aurora create "Study Python" --description "Review chapter 5" --category study --end-date 2026-06-15
 ```
 
-### Listar tarefas
+### List tasks
 
 ```bash
 uv run aurora show
 ```
 
 ```
-         Tasks
+           Tasks
 ┌───────┬───────────────┬────────────┐
 │ Index │ Title         │ Status     │
 ├───────┼───────────────┼────────────┤
-│ 1     │ Estudar Python│ new        │
+│ 1     │ Study Python  │ new        │
 └───────┴───────────────┴────────────┘
 ```
 
-### Atualizar uma tarefa
+### Update a task
 
 ```bash
 uv run aurora update 1 --status in_progress
 ```
 
-### Deletar uma tarefa
+### Delete a task
 
 ```bash
 uv run aurora delete 1
 ```
 
-## Campos disponíveis
+## Task Fields
 
-| Campo         | Tipo       | Descrição                                      |
-|---------------|------------|------------------------------------------------|
-| `title`       | obrigatório | Nome da tarefa                                |
-| `description` | opcional   | Detalhes adicionais                            |
-| `start-date`  | opcional   | Data de início (`YYYY-MM-DD`)                  |
-| `end-date`    | opcional   | Prazo (`YYYY-MM-DD`)                           |
-| `category`    | opcional   | `work`, `study`, `health`, `hobby`             |
-| `status`      | opcional   | `new`, `in_progress`, `done`, `deleted`        |
+| Field         | Type     | Description                                    |
+|---------------|----------|------------------------------------------------|
+| `title`       | required | Task name                                      |
+| `description` | optional | Additional details                             |
+| `start-date`  | optional | Start date (`YYYY-MM-DD`)                      |
+| `end-date`    | optional | Deadline (`YYYY-MM-DD`)                        |
+| `category`    | optional | `work`, `study`, `health`, `hobby`             |
+| `status`      | optional | `new`, `in_progress`, `done`, `deleted`        |
 
-## Estrutura do projeto
+## Project Structure
 
 ```
 src/aurora/
-├── cli.py        # Comandos da CLI (Typer)
-├── crud.py       # Operações de create, read, update, delete
-├── storage.py    # Persistência em JSON
-├── task.py       # Modelo de dados (dataclass + enums)
-└── exceptions.py # Erros customizados
+├── cli.py        # CLI commands (Typer)
+├── crud.py       # Create, read, update, delete operations
+├── storage.py    # JSON persistence layer
+├── task.py       # Data model (dataclass + enums)
+└── exceptions.py # Custom exceptions
 tests/
-└── crud_test.py  # Testes automatizados
+└── crud_test.py  # Automated tests
 ```
 
-## Testes
+## Running Tests
 
 ```bash
 uv run pytest
 ```
 
-## Licença
+## License
 
 MIT
