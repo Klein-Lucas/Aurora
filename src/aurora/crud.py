@@ -1,4 +1,4 @@
-from .storage import StorageProtocol
+from aurora.storage import StorageProtocol
 from .task import Task
 from uuid import UUID
 

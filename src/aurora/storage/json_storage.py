@@ -1,24 +1,12 @@
 from aurora.task import Task, Category, Status
+from uuid import UUID
 from aurora.exceptions import TaskNotFoundError
 import json
 from pathlib import Path
-from uuid import UUID
 from datetime import date
 from enum import Enum
 from dataclasses import asdict
-from typing import Protocol
 
-
-class StorageProtocol(Protocol):
-    def create(self, task : Task) -> None: ...
-
-    def get_task(self, id : UUID) -> Task | None: ...
-
-    def get_all(self) -> list[Task]: ...
-
-    def update(self, new_task : Task) -> None: ...
-
-    def delete(self, id : UUID) -> None: ...
 
 
 DATA_DIR = Path(__file__).parent.parent.parent / "data"

@@ -1,9 +1,8 @@
 from pathlib import Path
-
 import pytest
 from uuid import uuid4
 from aurora.crud import TaskCRUD
-from aurora.storage import JSONStorage
+from aurora.storage.json_storage import JSONStorage
 from aurora.task import Task
 from aurora.exceptions import TaskNotFoundError
 

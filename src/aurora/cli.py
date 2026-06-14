@@ -1,4 +1,4 @@
-from aurora.storage import JSONStorage
+from aurora.storage.json_storage import JSONStorage
 from aurora.crud import TaskCRUD
 from aurora.task import Category, Status, Task
 from aurora.exceptions import TaskNotFoundError
