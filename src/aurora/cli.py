@@ -1,6 +1,7 @@
-from .storage import JSONStorage
-from .crud import TaskCRUD
-from .task import Category, Status, Task
+from aurora.storage import JSONStorage
+from aurora.crud import TaskCRUD
+from aurora.task import Category, Status, Task
+from aurora.exceptions import TaskNotFoundError
 from uuid import UUID
 from datetime import date
 import typer
@@ -48,8 +49,12 @@ def delete(index: int):
     tasks = crud.read_all()
     if index < 1 or index > len(tasks):
         console.print("[red]Index not found[/red]")
-        raise typer.Exit()    
-    crud.delete_by_id(id=tasks[index-1].id)
+        raise typer.Exit()
+    try:
+        crud.delete_by_id(id=tasks[index-1].id)
+    except TaskNotFoundError:
+        console.print("[red]Erro interno: task não encontrada no storage.[/red]")
+        raise typer.Exit(code=1)   
 
 @app.command()
 def update(
@@ -65,20 +70,24 @@ def update(
     if index < 1 or index > len(tasks):
         console.print("[red]Index not found[/red]")
         raise typer.Exit()
-    task = crud.read_by_id(id=tasks[index-1].id)
-    if title is not None:
-        task.title = title
-    if description is not None:
-        task.description = description
-    if start_date is not None:
-        task.start_date = date.fromisoformat(start_date)
-    if end_date is not None:
-        task.end_date = date.fromisoformat(end_date)
-    if category is not None:
-        task.category = category
-    if status is not None:
-        task.status = status
-    crud.update_task(updated_task=task)
+    try:
+        task = crud.read_by_id(id=tasks[index-1].id)
+        if title is not None:
+            task.title = title
+        if description is not None:
+            task.description = description
+        if start_date is not None:
+            task.start_date = date.fromisoformat(start_date)
+        if end_date is not None:
+            task.end_date = date.fromisoformat(end_date)
+        if category is not None:
+            task.category = category
+        if status is not None:
+            task.status = status
+        crud.update_task(updated_task=task)
+    except TaskNotFoundError:
+        console.print("[red]Erro interno: task não encontrada no storage.[/red]")
+        raise typer.Exit(code=1)    
 
 if __name__ == "__main__":
     app()
