@@ -2,19 +2,16 @@ from aurora.task import Task, Category, Status
 from uuid import UUID
 from aurora.exceptions import TaskNotFoundError
 import json
+from aurora.config import DATA_DIR
 from pathlib import Path
 from datetime import date
 from enum import Enum
 from dataclasses import asdict
 
-
-
-DATA_DIR = Path(__file__).parent.parent.parent / "data"
-DB_FILE = DATA_DIR / "db.json"
-
-
 class JSONStorage:
-    def __init__(self, path: Path = DB_FILE):
+    _JSON_FILE = DATA_DIR / "db.json"
+
+    def __init__(self, path: Path = _JSON_FILE):
         self.path = path
     
     @staticmethod
@@ -85,5 +82,5 @@ class JSONStorage:
     def delete(self, id : UUID) -> None:
         data = self._load()
         task_index = self._find_in_list(data=data, id=id)
-        data.remove(data[task_index])
+        data.pop(task_index)
         self._save(data)
