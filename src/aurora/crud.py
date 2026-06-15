@@ -1,5 +1,5 @@
 from aurora.storage import StorageProtocol
-from .task import Task
+from aurora.task import Task
 from uuid import UUID
 
 class TaskCRUD():
