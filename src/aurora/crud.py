@@ -8,7 +8,7 @@ class TaskCRUD():
     
     # Create
     def create_task(self, task: Task):
-        self.storage.create(task=task)
+        self.storage.create_task(task=task)
 
     # Read    
     def read_by_id(self, id: UUID) -> Task:

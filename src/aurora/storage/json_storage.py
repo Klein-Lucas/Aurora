@@ -59,7 +59,7 @@ class JSONStorage:
             return []
         return [self._deserialize(task) for task in data]
     
-    def create(self, task : Task) -> None:
+    def create_task(self, task : Task) -> None:
         data = self._load()
         data.append(task)
         self._save(data)
