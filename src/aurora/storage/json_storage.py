@@ -9,7 +9,7 @@ from enum import Enum
 from dataclasses import asdict
 
 class JSONStorage:
-    _JSON_FILE = DATA_DIR / "db.json"
+    _JSON_FILE = DATA_DIR / "json_db.json"
 
     def __init__(self, path: Path = _JSON_FILE):
         self.path = path
@@ -38,7 +38,7 @@ class JSONStorage:
             title = data["title"],
             status = Status(data["status"]),
             created_at = date.fromisoformat(data["created_at"]),
-            sub_tasks = [self._deserialize(task) for task in data.get("sub_tasks",[])],
+            parent_id = UUID(data["parent_id"]) if data.get("parent_id") else None,
             description = data.get("description"),
             end_date = date.fromisoformat(data.get("end_date")) if data.get("end_date") else None,
             start_date = date.fromisoformat(data.get("start_date")) if data.get("start_date") else None,
