@@ -20,7 +20,7 @@ class JSONStorage:
             if task.id == id:
                 return i
         # If the task is not found
-        raise TaskNotFoundError(f"Task com id '{id}' não encontrada")
+        raise TaskNotFoundError(id)
 
     @staticmethod
     def _serialize(obj):
@@ -46,7 +46,7 @@ class JSONStorage:
         )
 
     def _save(self, tasks: list[Task]):
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         data = [asdict(task) for task in tasks]
         with open(self.path, "w") as file:
             json.dump(data, file, default=self._serialize, indent=2)

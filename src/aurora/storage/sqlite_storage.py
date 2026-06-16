@@ -12,6 +12,7 @@ class SQLiteStorage:
 
     def __init__(self, path: Path = _DB_FILE):
         self.path = path
+        self.path.parent.mkdir(parents=True, exist_ok=True)
         with self._get_connection() as cur:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS tasks(
@@ -30,6 +31,7 @@ class SQLiteStorage:
     @contextmanager
     def _get_connection(self):
         conn = sqlite3.connect(self.path)
+        conn.execute("PRAGMA foreign_keys = ON")
         try:
             yield conn.cursor()
             conn.commit()
@@ -73,7 +75,7 @@ class SQLiteStorage:
         result = cur.fetchone()
         if result is not None:
             return result
-        raise TaskNotFoundError(f"Task com id '{id}' não encontrada")
+        raise TaskNotFoundError(id)
         
     
     def create_task(self, task: Task):
