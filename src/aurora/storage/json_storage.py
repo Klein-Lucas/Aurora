@@ -59,12 +59,12 @@ class JSONStorage:
             return []
         return [self._deserialize(task) for task in data]
     
-    def create_task(self, task : Task) -> None:
+    def create_task(self, task: Task) -> None:
         data = self._load()
         data.append(task)
         self._save(data)
 
-    def get_task(self, id : UUID) -> Task:
+    def get_task(self, id: UUID) -> Task:
         data = self._load()
         task_index = self._find_in_list(data, id)
         return data[task_index]
@@ -72,14 +72,14 @@ class JSONStorage:
     def get_all(self) -> list[Task]:
         return self._load()
 
-    def update(self, updated_task : Task) -> None:
+    def update(self, updated_task: Task) -> None:
         data = self._load()
         task_index = self._find_in_list(data=data, id=updated_task.id)
         data[task_index] = updated_task
         self._save(data)
 
 
-    def delete(self, id : UUID) -> None:
+    def delete(self, id: UUID) -> None:
         data = self._load()
         task_index = self._find_in_list(data=data, id=id)
         data.pop(task_index)
