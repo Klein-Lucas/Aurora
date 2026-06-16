@@ -1,4 +1,4 @@
-from aurora.storage.json_storage import JSONStorage
+from aurora.storage.sqlite_storage import SQLiteStorage
 from aurora.crud import TaskCRUD
 from aurora.task import Category, Status, Task
 from aurora.exceptions import TaskNotFoundError
@@ -8,7 +8,7 @@ import typer
 from rich.table import Table
 from rich.console import Console
 
-storage = JSONStorage()
+storage = SQLiteStorage()
 crud = TaskCRUD(storage=storage)
 
 app = typer.Typer()
