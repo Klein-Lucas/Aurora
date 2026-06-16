@@ -1,45 +1,27 @@
-from .storage import JSONStorage
-from .task import Task
+from aurora.storage import StorageProtocol
+from aurora.task import Task
 from uuid import UUID
-from .exceptions import TaskNotFoundError
 
 class TaskCRUD():
-    def __init__(self, storage: JSONStorage):
+    def __init__(self, storage: StorageProtocol):
         self.storage = storage
-
+    
     # Create
     def create_task(self, task: Task):
-        data = self.storage.load()
-        data.append(task)
-        self.storage.save(data)
+        self.storage.create_task(task=task)
 
-    # Read
-    @staticmethod
-    def _find_in_list(data: list[Task], id: UUID) -> Task:
-        for task in data:
-            if task.id == id:
-                return task
-        raise TaskNotFoundError(id)
-    
+    # Read    
     def read_by_id(self, id: UUID) -> Task:
-        data = self.storage.load()
-        return self._find_in_list(data, id)
+        return self.storage.get_task(id=id)
+
     
     def read_all(self) -> list[Task]:
-        return self.storage.load()
+        return self.storage.get_all()
 
     # Update
     def update_task(self, updated_task: Task):
-        data = self.storage.load()
-        for i, task in enumerate(data):
-            if task.id == updated_task.id:
-                data[i] = updated_task
-                self.storage.save(data)
-                return
-        raise TaskNotFoundError(updated_task.id)
+        self.storage.update(updated_task=updated_task)
+
     # Delete
     def delete_by_id(self, id: UUID):
-        data = self.storage.load()
-        selected_task = self._find_in_list(data, id)
-        data.remove(selected_task)
-        self.storage.save(data)
+        self.storage.delete(id=id)

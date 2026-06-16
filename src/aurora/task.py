@@ -25,7 +25,7 @@ class Task:
     end_date: date | None = None
     description: str | None = None
     category: Category | None = None
-    sub_tasks: "list[Task]" = field(default_factory=list)
+    parent_id: uuid.UUID | None = None
     # Default
     id: uuid.UUID = field(default_factory=uuid.uuid4)
     created_at: date = field(default_factory=date.today)

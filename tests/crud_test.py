@@ -1,16 +1,19 @@
 from pathlib import Path
-
 import pytest
 from uuid import uuid4
 from aurora.crud import TaskCRUD
-from aurora.storage import JSONStorage
+from aurora.storage.json_storage import JSONStorage
+from aurora.storage.sqlite_storage import SQLiteStorage
 from aurora.task import Task
 from aurora.exceptions import TaskNotFoundError
 
-@pytest.fixture
-def crud(tmp_path: Path):
-    temp_dir = JSONStorage(path=tmp_path / "test.json")
-    return TaskCRUD(storage=temp_dir)
+@pytest.fixture(params=["json", "sqlite"])
+def crud(request, tmp_path: Path):
+    if request.param == "json":
+        storage = JSONStorage(path=tmp_path / "test.json")
+    else:
+        storage = SQLiteStorage(path=tmp_path / "test.db")
+    return TaskCRUD(storage=storage)
 
 @pytest.fixture
 def crud_with_tasks(crud: TaskCRUD):
