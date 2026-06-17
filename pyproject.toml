@@ -3,7 +3,11 @@ name = "aurora"
 version = "0.1.0"
 description = "A project that will grow as his maker discovers new things."
 requires-python = ">=3.11"
-dependencies = ["typer", "rich"]
+dependencies = [
+    "typer",
+    "rich",
+    "pydantic>=2.13.4",
+]
 
 [build-system]
 requires = ["hatchling"]
