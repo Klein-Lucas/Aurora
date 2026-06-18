@@ -7,6 +7,8 @@ dependencies = [
     "typer",
     "rich",
     "pydantic>=2.13.4",
+    "fastapi>=0.137.2",
+    "uvicorn>=0.49.0",
 ]
 
 [build-system]

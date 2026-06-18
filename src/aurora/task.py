@@ -16,7 +16,7 @@ class Category(Enum):
     HEALTH = "health"
     HOBBY = "hobby"
 
-class Task(BaseModel):
+class TaskBase(BaseModel):
     # Required
     title: str
     # Optional
@@ -25,15 +25,19 @@ class Task(BaseModel):
     description: str | None = None
     category: Category | None = None
     parent_id: uuid.UUID | None = None
-    # Default
-    id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    created_at: date = Field(default_factory=date.today)
-    status: Status = Field(default=Status.NEW)
 
     @field_validator("title")
     @classmethod
     def validate_title(cls, value: str):
+        if value is None:
+            return None
         value = value.strip()
         if not value:
             raise MissingRequiredFieldError(["title"])
         return value
+
+class Task(TaskBase):
+    # Default
+    id: uuid.UUID = Field(default_factory=uuid.uuid4)
+    created_at: date = Field(default_factory=date.today)
+    status: Status = Field(default=Status.NEW)
