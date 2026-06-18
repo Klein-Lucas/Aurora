@@ -73,11 +73,13 @@ class SQLiteStorage:
         raise TaskNotFoundError(id)
         
     
-    def create_task(self, task: Task):
+    def create_task(self, task: Task) -> Task:
         query_params = self._task_to_row(task=task)
         query = "INSERT INTO tasks " + self._insert_clause()
         with self._get_connection() as cur:
             cur.execute(query, query_params)
+            result = self._find_by_id(cur=cur, id=task.id)
+        return self._row_to_task(result)
         
 
     def get_task(self, id: UUID) -> Task:
@@ -93,14 +95,17 @@ class SQLiteStorage:
             tasks = [self._row_to_task(task) for task in result]
             return tasks
 
-    def update(self, updated_task: Task):
+    def update(self, updated_task: Task) -> Task:
         query_params = self._task_to_row(updated_task)
         query = "UPDATE OR FAIL tasks SET " + self._update_clause() + " WHERE id = :id"
         with self._get_connection() as cur:
             self._find_by_id(cur=cur, id=updated_task.id)
             cur.execute(query, query_params)
+            result = self._find_by_id(cur=cur, id=updated_task.id)
+        return self._row_to_task(result)
 
-    def delete(self, id: UUID):
+    def delete(self, id: UUID) -> Task:
         with self._get_connection() as cur:
-            self._find_by_id(cur=cur, id=id)
+            deleted_task = self._find_by_id(cur=cur, id=id)
             cur.execute("DELETE FROM tasks WHERE id=?", (str(id),))
+        return self._row_to_task(deleted_task)

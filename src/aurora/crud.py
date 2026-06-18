@@ -7,8 +7,8 @@ class TaskCRUD():
         self.storage = storage
     
     # Create
-    def create_task(self, task: Task):
-        self.storage.create_task(task=task)
+    def create_task(self, task: Task) -> Task:
+        return self.storage.create_task(task=task)
 
     # Read    
     def read_by_id(self, id: UUID) -> Task:
@@ -19,9 +19,9 @@ class TaskCRUD():
         return self.storage.get_all()
 
     # Update
-    def update_task(self, updated_task: Task):
-        self.storage.update(updated_task=updated_task)
+    def update_task(self, updated_task: Task) -> Task:
+        return self.storage.update(updated_task=updated_task)
 
     # Delete
-    def delete_by_id(self, id: UUID):
-        self.storage.delete(id=id)
+    def delete_by_id(self, id: UUID) -> Task:
+        return self.storage.delete(id=id)
