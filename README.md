@@ -1,16 +1,19 @@
 # aurora
 
-> A minimalist CLI task manager — fast, clean, and built for the terminal.
+> A minimalist task manager — usable both as a terminal CLI and as a REST API.
 
 ## About
 
-**aurora** is a command-line tool to create, view, update, and delete tasks directly from the terminal. Built with [Typer](https://typer.tiangolo.com/) and [Rich](https://rich.readthedocs.io/), it combines a simple interface with a visually polished output.
+**aurora** lets you create, view, update, and delete tasks. It started as a CLI built with [Typer](https://typer.tiangolo.com/) and [Rich](https://rich.readthedocs.io/), and now also exposes a [FastAPI](https://fastapi.tiangolo.com/) HTTP API. Both interfaces share the same core: a `Task` model, a storage-agnostic CRUD layer, and a SQLite-backed storage implementation.
 
 ## Tech Stack
 
 - **Python** 3.11+
 - **Typer** — CLI framework
 - **Rich** — colored tables and terminal output
+- **FastAPI** + **Uvicorn** — REST API and ASGI server
+- **Pydantic** — data validation and schemas
+- **SQLite** — persistence
 - **uv** — package and environment manager
 - **pytest** — automated tests
 
@@ -28,15 +31,17 @@ uv sync
 
 ## Usage
 
+### CLI
+
 All commands run with `python -m aurora.cli <command>`.
 
-### Create a task
+#### Create a task
 
 ```bash
 python -m aurora.cli create "Study Python" --description "Review chapter 5" --category study --end-date 2026-06-15
 ```
 
-### List tasks
+#### List tasks
 
 ```bash
 python -m aurora.cli show
@@ -51,16 +56,40 @@ python -m aurora.cli show
 └───────┴───────────────┴────────────┘
 ```
 
-### Update a task
+#### Update a task
 
 ```bash
 python -m aurora.cli update 1 --status in_progress
 ```
 
-### Delete a task
+#### Delete a task
 
 ```bash
 python -m aurora.cli delete 1
+```
+
+### API
+
+Start the server:
+
+```bash
+uv run uvicorn aurora.main:app --reload
+```
+
+Interactive docs are available at `http://127.0.0.1:8000/docs`.
+
+| Method | Endpoint      | Description       |
+|--------|---------------|--------------------|
+| POST   | `/tasks`      | Create a task      |
+| GET    | `/tasks`      | List all tasks     |
+| GET    | `/tasks/{id}` | Get a task by id   |
+| PATCH  | `/tasks/{id}` | Update a task      |
+| DELETE | `/tasks/{id}` | Delete a task      |
+
+```bash
+curl -X POST http://127.0.0.1:8000/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Study Python", "category": "study", "end_date": "2026-06-15"}'
 ```
 
 ## Task Fields
@@ -69,22 +98,31 @@ python -m aurora.cli delete 1
 |---------------|----------|------------------------------------------------|
 | `title`       | required | Task name                                      |
 | `description` | optional | Additional details                             |
-| `start-date`  | optional | Start date (`YYYY-MM-DD`)                      |
-| `end-date`    | optional | Deadline (`YYYY-MM-DD`)                        |
-| `category`    | optional | `work`, `study`, `health`, `hobby`             |
-| `status`      | optional | `new`, `in_progress`, `done`, `deleted`        |
+| `start_date`  | optional | Start date (`YYYY-MM-DD`)                      |
+| `end_date`    | optional | Deadline (`YYYY-MM-DD`)                        |
+| `category`    | optional | `work`, `study`, `health`, `hobby`              |
+| `status`      | optional | `new`, `in_progress`, `done`, `deleted`         |
+| `parent_id`   | optional | Id of a parent task, for subtasks               |
 
 ## Project Structure
 
 ```
 src/aurora/
-├── cli.py        # CLI commands (Typer)
-├── crud.py       # Create, read, update, delete operations
-├── storage.py    # JSON persistence layer
-├── task.py       # Data model (dataclass + enums)
-└── exceptions.py # Custom exceptions
+├── cli.py             # CLI commands (Typer)
+├── main.py            # FastAPI app entrypoint
+├── routes/
+│   └── tasks.py        # /tasks REST endpoints
+├── schemas.py          # Pydantic request/response schemas
+├── crud.py             # Create, read, update, delete operations
+├── storage/
+│   ├── protocol.py     # Storage interface (Protocol)
+│   ├── sqlite_storage.py # SQLite implementation
+│   └── json_storage.py   # JSON implementation
+├── task.py             # Data model (Pydantic BaseModel + enums)
+├── config.py           # Paths and settings
+└── exceptions.py       # Custom exceptions
 tests/
-└── crud_test.py  # Automated tests
+└── crud_test.py        # Automated tests
 ```
 
 ## Running Tests
