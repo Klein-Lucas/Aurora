@@ -53,8 +53,8 @@ def delete(index: int):
     try:
         crud.delete_by_id(id=tasks[index-1].id)
     except TaskNotFoundError:
-        console.print("[red]Erro interno: task não encontrada no storage.[/red]")
-        raise typer.Exit(code=1)   
+        console.print("[red]Internal error: task not found in storage.[/red]")
+        raise typer.Exit(code=1)
 
 @app.command()
 def update(
@@ -86,8 +86,8 @@ def update(
             task.status = status
         crud.update_task(updated_task=task)
     except TaskNotFoundError:
-        console.print("[red]Erro interno: task não encontrada no storage.[/red]")
-        raise typer.Exit(code=1)    
+        console.print("[red]Internal error: task not found in storage.[/red]")
+        raise typer.Exit(code=1)
 
 if __name__ == "__main__":
     app()
