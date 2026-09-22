@@ -1,10 +1,20 @@
-# aurora
+# Aurora
 
 > A minimalist task manager — usable both as a terminal CLI and as a REST API.
 
 ## About
 
-**aurora** lets you create, view, update, and delete tasks. It started as a CLI built with [Typer](https://typer.tiangolo.com/) and [Rich](https://rich.readthedocs.io/), and now also exposes a [FastAPI](https://fastapi.tiangolo.com/) HTTP API. Both interfaces share the same core: a `Task` model, a storage-agnostic CRUD layer, and a SQLite-backed storage implementation.
+**Aurora** lets you create, view, update, and delete tasks. It started as a CLI built with [Typer](https://typer.tiangolo.com/) and [Rich](https://rich.readthedocs.io/), and now also exposes a [FastAPI](https://fastapi.tiangolo.com/) HTTP API. Both interfaces share the same core: a `Task` model, a storage-agnostic CRUD layer, and a SQLite-backed storage implementation.
+
+This is a personal portfolio project built to practice and showcase backend engineering fundamentals — clean architecture, typed data validation, automated testing, and REST API design — with a React frontend currently in development on a separate branch.
+
+## Highlights
+
+- **Storage-agnostic architecture** — a `Protocol`-based interface decouples business logic from persistence, allowing SQLite and JSON backends to be swapped without touching the CRUD layer
+- **Two interfaces, one core** — CLI and REST API reuse the same `Task` model, CRUD layer, and validation logic instead of duplicating business rules
+- **Type-safe data validation** with Pydantic models and enums shared across both interfaces
+- **Automated test coverage** with `pytest`, including FastAPI's `TestClient` for API-level tests
+- **Incremental delivery** via feature branches and pull requests, tracked in the [Roadmap](#roadmap) below
 
 ## Tech Stack
 
@@ -130,6 +140,12 @@ tests/
 ```bash
 uv run pytest tests/
 ```
+
+## Roadmap
+
+- [x] CLI (Typer + Rich)
+- [x] REST API (FastAPI)
+- [ ] Web frontend (React) — in progress on a dedicated branch
 
 ## License
 
