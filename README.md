@@ -132,7 +132,8 @@ src/aurora/
 ├── config.py           # Paths and settings
 └── exceptions.py       # Custom exceptions
 tests/
-└── crud_test.py        # Automated tests
+├── crud_test.py        # CRUD layer tests (JSON + SQLite backends)
+└── api_test.py          # FastAPI endpoint tests (TestClient)
 ```
 
 ## Running Tests
