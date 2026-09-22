@@ -41,3 +41,25 @@ def test_read_by_id_not_found(crud: TaskCRUD):
     uuid_inexistent = uuid4()
     with pytest.raises(TaskNotFoundError):
         crud.read_by_id(id=uuid_inexistent)
+
+def test_update_task(crud: TaskCRUD, sample_task: Task):
+    crud.create_task(task=sample_task)
+    sample_task.title = "Updated title"
+    updated = crud.update_task(updated_task=sample_task)
+    assert updated.title == "Updated title"
+    assert crud.read_by_id(id=sample_task.id).title == "Updated title"
+
+def test_update_task_not_found(crud: TaskCRUD, sample_task: Task):
+    with pytest.raises(TaskNotFoundError):
+        crud.update_task(updated_task=sample_task)
+
+def test_delete_task(crud: TaskCRUD, sample_task: Task):
+    crud.create_task(task=sample_task)
+    deleted = crud.delete_by_id(id=sample_task.id)
+    assert deleted.id == sample_task.id
+    assert crud.read_all() == []
+
+def test_delete_task_not_found(crud: TaskCRUD):
+    uuid_inexistent = uuid4()
+    with pytest.raises(TaskNotFoundError):
+        crud.delete_by_id(id=uuid_inexistent)

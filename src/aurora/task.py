@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from pydantic import BaseModel, Field, field_validator
 from datetime import date
 import uuid
 from enum import Enum
@@ -16,8 +16,7 @@ class Category(Enum):
     HEALTH = "health"
     HOBBY = "hobby"
 
-@dataclass
-class Task:
+class TaskBase(BaseModel):
     # Required
     title: str
     # Optional
@@ -26,11 +25,19 @@ class Task:
     description: str | None = None
     category: Category | None = None
     parent_id: uuid.UUID | None = None
-    # Default
-    id: uuid.UUID = field(default_factory=uuid.uuid4)
-    created_at: date = field(default_factory=date.today)
-    status: Status = field(default=Status.NEW)
 
-    def __post_init__(self):
-        if not self.title:
+    @field_validator("title")
+    @classmethod
+    def validate_title(cls, value: str):
+        if value is None:
+            return None
+        value = value.strip()
+        if not value:
             raise MissingRequiredFieldError(["title"])
+        return value
+
+class Task(TaskBase):
+    # Default
+    id: uuid.UUID = Field(default_factory=uuid.uuid4)
+    created_at: date = Field(default_factory=date.today)
+    status: Status = Field(default=Status.NEW)
